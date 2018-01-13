@@ -6,6 +6,8 @@
  * Time: 16:16
  */
 
+require_once "application/models/objects/type.php";
+
 class user
 {
     private $name;
@@ -13,16 +15,18 @@ class user
     private $email;
     private $username;
     private $password;
-    private $phone = NULL;
+    private $type = type::User;
+    private $phone = "";
     private $id = NULL; // private_key
 
-    public function __construct(string $name, string $surname, string $email,
-                                string $username, string $password, string $phone=NULL, int $id=NULL){
+    public function __construct(string $name, string $surname, string $email, string $username, string $password,
+                                int $type=type::User, string $phone="", int $id=NULL){
         $this->name = $name;
         $this->surname = $surname;
         $this->email = $email;
         $this->username = $username;
         $this->password = $password;
+        $this->type = $type;
         $this->phone = $phone;
         $this->id = $id;
     }
@@ -41,6 +45,9 @@ class user
 
     public function getUsername(){ return $this->username; }
     public function setUsername(string $username) { $this->username = $username; }
+
+    public function getType(){ return $this->type; }
+    public function setType(int $type) { $this->type = $type; }
 
     public function getPhone(){ return $this->phone; }
     public function setPhone(string $phone){ $this->phone = $phone; }

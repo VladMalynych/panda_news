@@ -16,13 +16,13 @@ class comment
     private $id; //private_key
 
     public function __construct(int $article_id, int $user_id, string $content,
-                                int $points, DateTime $post_time=NULL, int $id=NULL){
+                                int $points=0, DateTime $post_time=NULL, int $id=NULL){
         $this->article_id = $article_id;
         $this->user_id = $user_id;
         $this->content = $content;
         $this->points = $points;
         if ($post_time == NULL){
-            $this->post_time = new DateTime('now', new DateTimeZone('Europe/London'));
+            $this->post_time = new DateTime('now', new DateTimeZone('Europe/Prague'));
         } else{
             $this->post_time = $post_time;
         }

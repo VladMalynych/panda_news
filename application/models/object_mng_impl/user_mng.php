@@ -6,7 +6,9 @@
  * Time: 16:59
  */
 
+require_once 'application/models/database/database_connection.php';
 require_once('application/models/object_mng_virtual/user_mng_interface.php');
+require_once('application/models/objects/user.php');
 
 class user_mng implements user_mng_interface
 {
@@ -19,8 +21,9 @@ class user_mng implements user_mng_interface
             $new_user->username = $user->getUsername();
             $new_user->password = $user->getPassword();
             $new_user->phone = $user->getPhone();
+            $new_user->type = $user->getType();
             $user_id_ret_val = R::store($new_user);
-            return $this->find_user_by_id($user_id_ret_val);
+            return $this->find_user($user_id_ret_val);
         }
         return null;
     }
@@ -30,11 +33,10 @@ class user_mng implements user_mng_interface
         $temp_user->name = $user->getName();
         $temp_user->surname = $user->getSurname();
         $temp_user->email = $user->getEmail();
-        $temp_user->username = $user->getUsername();
         $temp_user->password = $user->getPassword();
         $temp_user->phone = $user->getPhone();
         $user_id_ret_val = R::store($temp_user);
-        return $this->find_user_by_id($user_id_ret_val);
+        return $this->find_user($user_id_ret_val);
     }
 
     public function update_user(user &$user){
@@ -44,7 +46,7 @@ class user_mng implements user_mng_interface
                 return null;
             }
         } else {
-            $update_user = $this->find_user_by_id($user->getId());
+            $update_user = $this->find_user($user->getId());
             if ( $update_user == null){
                 return null;
             }
@@ -53,7 +55,7 @@ class user_mng implements user_mng_interface
     }
 
     public function delete_user_by_id(int $user_id){
-        if ($this->find_user_by_id($user_id) == null){
+        if ($this->find_user($user_id) == null){
             return false;
         }
         R::trash('user', $user_id);
@@ -68,8 +70,9 @@ class user_mng implements user_mng_interface
         return $this->delete_user_by_id($user->getId());
     }
 
-    public function find_user_by_id(int $user_id){
+    public function find_user(int $user_id){
         $bean_user = R::findOne('user', "`id` = ?", [$user_id]);
+
         if( $bean_user == null)
             return null;
         return $this->map_bean($bean_user);
@@ -106,6 +109,6 @@ class user_mng implements user_mng_interface
         }
         $bean->export();
         return new user( $bean['name'], $bean['surname'], $bean['email'], $bean['username'],
-                         $bean['password'], $bean['phone'], $bean['id'] );
+                         $bean['password'], intval($bean['type']), $bean['phone'], $bean['id'] );
     }
 }

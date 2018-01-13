@@ -13,8 +13,7 @@ interface score_mng_interface
     // Update
     public function update_score(score &$score);
     // Delete
-    public function delete_score(score &$score);
-    public function delete_score_by_id(int $score_id);
+    public function delete_score(int $score_id);
     public function delete_score_by_article_user_id(int $article_id, int $user_id);
     // Read
     public function find_score_by_id(int $score_id);

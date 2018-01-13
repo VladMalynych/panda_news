@@ -7,6 +7,8 @@
  */
 
 require_once('application/models/object_mng_virtual/article_mng_interface.php');
+require_once('application/models/objects/article.php');
+require_once('application/models/objects/status.php');
 
 class article_mng implements article_mng_interface
 {
@@ -82,7 +84,7 @@ class article_mng implements article_mng_interface
         return $articles_array;
     }
 
-    public function find_articles_by_status(bool $approved){
+    public function find_articles_by_status(int $approved){
         $bean_articles = R::findLike('article',
             [
                 'status' => $approved
@@ -97,7 +99,7 @@ class article_mng implements article_mng_interface
         return $articles_array;
     }
 
-    public function find_articles_by_user_id_and_status(int $user_id, bool $approved){
+    public function find_articles_by_user_id_and_status(int $user_id, int $approved){
         $bean_articles = R::findLike('article',
             [
                 'user_id' => $user_id,
@@ -122,6 +124,32 @@ class article_mng implements article_mng_interface
             array_push($article_array, $this->map_bean($bean_article));
         }
         return $article_array;
+    }
+
+    public function find_n_articles(int $n, int $from){
+        $bean_articles = R::findAll('article', 'ORDER BY `post_time` DESC LIMIT ? OFFSET ?', array($n, $from));
+        if ($bean_articles == null)
+            return null;
+        $article_array = array();
+        foreach ($bean_articles as &$bean_article) {
+            array_push($article_array, $this->map_bean($bean_article));
+        }
+        return $article_array;
+    }
+
+    public function find_n_articles_by_status(int $approved, int $n, int $from){
+        $bean_articles = R::findLike('article',
+            [
+                'status' => $approved
+            ],
+            'ORDER BY `post_time` DESC LIMIT '.$n.' OFFSET '.$from); // Should be safe, as we have set argument types!
+        if ($bean_articles == null)
+            return null;
+        $articles_array = array();
+        foreach ($bean_articles as &$bean_article) {
+            array_push($articles_array, $this->map_bean($bean_article));
+        }
+        return $articles_array;
     }
 
     private function map_bean(RedBeanPHP\OODBBean $bean){

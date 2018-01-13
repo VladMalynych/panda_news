@@ -7,6 +7,7 @@
  */
 
 require_once('application/models/object_mng_virtual/score_mng_interface.php');
+require_once('application/models/objects/score.php');
 
 class score_mng implements score_mng_interface
 {
@@ -44,7 +45,10 @@ class score_mng implements score_mng_interface
         return $this->update_score_impl($update_score->getId(), $score);
     }
 
-    public function delete_score_by_id(int $score_id){
+    public function delete_score(int $score_id){
+        if ( $this->find_score_by_id($score_id) == null){
+            return false;
+        }
         R::trash('score', $score_id);
         return true;
     }
@@ -54,14 +58,7 @@ class score_mng implements score_mng_interface
         if ($score == null) {
             return false;
         }
-        return $this->delete_score_by_id($score->getId());
-    }
-
-    public function delete_score(score &$score){
-        if ($score->getId() == null){
-            return $this->delete_score_by_article_user_id($score->getArticleId(), $score->getUserId());
-        }
-        return $this->delete_score_by_id($score->getId());
+        return $this->delete_score($score->getId());
     }
 
     public function find_score_by_id(int $score_id){

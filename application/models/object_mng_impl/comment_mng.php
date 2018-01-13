@@ -7,6 +7,7 @@
  */
 
 require_once ('application/models/object_mng_virtual/comment_mng_interface.php');
+require_once('application/models/objects/comment.php');
 
 class comment_mng implements comment_mng_interface
 {
@@ -57,7 +58,7 @@ class comment_mng implements comment_mng_interface
             [
                 'user_id' => $user_id
             ],
-            'ORDER BY `post_time` DESC');
+            'ORDER BY `post_time` ASC');
         if ($bean_comments == null)
             return null;
         $comments_array = array();
@@ -72,7 +73,7 @@ class comment_mng implements comment_mng_interface
             [
                 'article_id' => $article_id
             ],
-            'ORDER BY `post_time` DESC');
+            'ORDER BY `post_time` ASC');
         if ($bean_comments == null)
             return null;
         $comments_array = array();
@@ -88,7 +89,7 @@ class comment_mng implements comment_mng_interface
                 'article_id' => $article_id,
                 'user_id' => $user_id
             ],
-            'ORDER BY `post_time` DESC');
+            'ORDER BY `post_time` ASC');
         if ($bean_comments == null)
             return null;
         $comments_array = array();
@@ -100,7 +101,7 @@ class comment_mng implements comment_mng_interface
 
     public function find_comments_by_article_id_after_date(int $article_id, DateTime $date){
         $bean_comments = R::find('comment',
-            '`article_id` = ? AND `post_time` > ? ORDER BY `post_time` DESC',
+            '`article_id` = ? AND `post_time` > ? ORDER BY `post_time` ASC',
             [$article_id, $date]
         );
         if ($bean_comments == null)
@@ -113,7 +114,7 @@ class comment_mng implements comment_mng_interface
     }
 
     public function find_all_comments(){
-        $bean_comments = R::findAll('comment', 'ORDER BY `post_time` DESC');
+        $bean_comments = R::findAll('comment', 'ORDER BY `post_time` ASC');
         if ($bean_comments == null)
             return null;
         $comment_array = array();

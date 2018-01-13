@@ -34,7 +34,7 @@ class database_properties
         $this->admin_surname  = $db_conf['admin_surname'];
         $this->admin_email    = $db_conf['admin_email'];
         $this->admin_username = $db_conf['admin_username'];
-        $this->admin_password = $db_conf['admin_password'];
+        $this->admin_password = password_hash($db_conf['admin_password'],PASSWORD_DEFAULT);
         $this->admin_phone    = $db_conf['admin_phone'];
     }
 }
